@@ -3,6 +3,10 @@ import math
 import string
 import numpy as np
 
+from os import listdir
+from os.path import isfile, join
+
+
 class Letter:
     
     
@@ -118,7 +122,20 @@ class Letter:
                 rows_found.append(y)
         return rows_found
     
-    def save_image(self, char):
+    def save_image_prepped(self, char):
+        print "about to save"
+        if (char in string.uppercase):
+            prepped_filepath = '../../data/prepped/chars/uppercase/'+char+'.png'
+        elif (char in string.lowercase):
+            prepped_filepath = '../../data/prepped/chars/lowercase/'+char+'.png'
+        elif (char in string.digits):
+            prepped_filepath = '../../data/prepped/chars/digits/'+char+'.png'
+        else:
+            print "error"
+        self.im.save(prepped_filepath)
+        print "saved!"
+    
+    def save_image_processed(self, char):
         print "about to save"
         if (char in string.uppercase):
             filepath = '../../data/processed/chars/uppercase/'+char+'.png'
@@ -136,33 +153,37 @@ def generate_data(char):
     print filepath
     im = Image.open(filepath)
     #im.show()
-    if (char in string.uppercase):
-        prepped_filepath = '../../data/prepped/chars/uppercase/'+char+'.png'
-    elif (char in string.lowercase):
-        prepped_filepath = '../../data/prepped/chars/lowercase/'+char+'.png'
-    elif (char in string.digits):
-        prepped_filepath = '../../data/prepped/chars/digits/'+char+'.png'
-    else:
-        print "error"
-    im.save(prepped_filepath)
+    
     letter = Letter(im)
     
     letter.find_sides()
     #letter.im.show()
-    6
     nonblank_rows = letter.find_nonblank_rows()
     #print "nonblank_rows =" +str(nonblank_rows)
     letter.recreate_letter(nonblank_rows)
+    letter.save_image_prepped(char)
     #letter.im.show()
     letter.scale_down()
     #letter.im.show()
     
     #print "done"
     #captcha.im.show()
-    letter.save_image(char)
+    letter.save_image_processed(char)
         
 
-#if __name__ == "__main__":
+if __name__ == "__main__":
+    
+    files = [ f for f in listdir('../../data/unprocessed') if isfile(join('../../data/unprocessed',f))]
+    chars = []
+    for x in files:
+        if "_" in x:
+            pass
+        else:
+            xsplit = x.split(".")
+            chars.append(xsplit[0])
+    for char in chars:
+        print char
+        generate_data(char)
     #generate_data("8")
     #for i in xrange(1, 25):
         #prep_data(i)

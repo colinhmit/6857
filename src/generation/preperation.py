@@ -170,12 +170,12 @@ class Captcha:
     
     def save_image(self, iternum):
         print "about to save"
-        filepath = '../../data/prepped/raw/preppeddata'+str(iternum)+'.png'
+        filepath = '../../data/prepped/raw/yourname_preppeddata'+str(iternum)+'.png'
         self.im.save(filepath)
         print "saved!"
         
 def prep_data(iternum):
-    filepath = '../../data/original/data'+str(iternum)+'.jpg'
+    filepath = '../../data/original/yourname_data'+str(iternum)+'.jpg'
     print filepath
     im = Image.open(filepath)
     #im.show()
@@ -197,10 +197,10 @@ def prep_data(iternum):
         
 
 if __name__ == "__main__":
-    prep_data(23)
-    prep_data(24)
-    #for i in xrange(1, 25):
-        #prep_data(i)
+    #prep_data(23)
+    #prep_data(24)
+    for i in xrange(1, 25):
+        prep_data(i)
         
     #prep_data(2)
 #    im = Image.open("data21.jpg")
