@@ -2,6 +2,7 @@ from PIL import Image
 import math
 import string
 import numpy as np
+import random
 
 from os import listdir
 from os.path import isfile, join
@@ -122,33 +123,34 @@ class Letter:
                 rows_found.append(y)
         return rows_found
     
-    def save_image_prepped(self, char):
+    def save_image_prepped(self, char, randnum):
         print "about to save"
         if (char in string.uppercase):
-            prepped_filepath = '../../data/prepped/chars/uppercase/'+char+'.png'
+            prepped_filepath = '../../data/prepped/chars/uppercase/'+char+"/"+char+str(randnum)+'.png'
         elif (char in string.lowercase):
-            prepped_filepath = '../../data/prepped/chars/lowercase/'+char+'.png'
+            prepped_filepath = '../../data/prepped/chars/lowercase/'+char+"/"+char+str(randnum)+'.png'
         elif (char in string.digits):
-            prepped_filepath = '../../data/prepped/chars/digits/'+char+'.png'
+            prepped_filepath = '../../data/prepped/chars/digits/'+char+"/"+char+str(randnum)+'.png'
         else:
             print "error"
         self.im.save(prepped_filepath)
         print "saved!"
     
-    def save_image_processed(self, char):
+    def save_image_processed(self, char, randnum):
         print "about to save"
         if (char in string.uppercase):
-            filepath = '../../data/processed/chars/uppercase/'+char+'.png'
+            filepath = '../../data/processed/chars/uppercase/'+char+"/"+char+str(randnum)+'.png'
         elif (char in string.lowercase):
-            filepath = '../../data/processed/chars/lowercase/'+char+'.png'
+            filepath = '../../data/processed/chars/lowercase/'+char+"/"+char+str(randnum)+'.png'
         elif (char in string.digits):
-            filepath = '../../data/processed/chars/digits/'+char+'.png'
+            filepath = '../../data/processed/chars/digits/'+char+"/"+char+str(randnum)+'.png'
         else:
             print "error"
         self.im.save(filepath)
         print "saved!"
         
 def generate_data(char):
+    randnum = random.randint(1,1000000)
     filepath = '../../data/unprocessed/'+char+'.png'
     print filepath
     im = Image.open(filepath)
@@ -161,14 +163,14 @@ def generate_data(char):
     nonblank_rows = letter.find_nonblank_rows()
     #print "nonblank_rows =" +str(nonblank_rows)
     letter.recreate_letter(nonblank_rows)
-    letter.save_image_prepped(char)
+    letter.save_image_prepped(char, randnum)
     #letter.im.show()
     letter.scale_down()
     #letter.im.show()
     
     #print "done"
     #captcha.im.show()
-    letter.save_image_processed(char)
+    letter.save_image_processed(char, randnum)
         
 
 if __name__ == "__main__":
