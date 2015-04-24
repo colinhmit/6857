@@ -108,9 +108,9 @@ def bruteforce_char(pixels):
                 print "------Comparing to: " +filename
                 char_im = Image.open(filepath+"/"+filename)
                 char_pixels = char_im.load()
-                print char_pixels[13,13]
+                #print char_pixels[13,13]
                 char_pixels = filter_image_black(char_pixels)
-                print char_pixels[13,13]
+                #print char_pixels[13,13]
                 perc = compare_pixels(pixels,char_pixels)
                 print "------Result: "+filename+" = "+str(perc)
                 if (perc>max_perc):
@@ -133,30 +133,30 @@ def process_char(pixels,avg_char_width, width, height,left_border):
         print "---Processing width :" + str(j)
         right_border = left_border+avg_char_width+j
         if (right_border>width):
-            pass
-        else:
-            data = np.zeros((height, right_border-left_border, 3),dtype=np.uint8)
-            for x in range(left_border, right_border):
-                for y in range(height):
-                    data[y][x-left_border] = pixels[x,y]
-            char_im = Image.fromarray(data, 'RGB')
-            letter = Letter(char_im)
-            nonblank_rows = letter.find_nonblank_rows()
-            letter.recreate_letter(nonblank_rows)
-            letter.scale_down()
-            
-            
-            perc, char, filepath = bruteforce_char(letter.pixels)
-            
-            print "---Done processing width :" + str(j)
-            print "---Results: Max % = " + str(perc) + " for " + char
-            
-            if (perc>max_perc):
-                max_perc = perc
-                max_char = char
-                max_filepath = filepath
-                max_right_border = right_border
-                max_im = letter.im
+            right_border = width-1
+        
+        data = np.zeros((height, right_border-left_border, 3),dtype=np.uint8)
+        for x in range(left_border, right_border):
+            for y in range(height):
+                data[y][x-left_border] = pixels[x,y]
+        char_im = Image.fromarray(data, 'RGB')
+        letter = Letter(char_im)
+        nonblank_rows = letter.find_nonblank_rows()
+        letter.recreate_letter(nonblank_rows)
+        letter.scale_down()
+        
+        
+        perc, char, filepath = bruteforce_char(letter.pixels)
+        
+        print "---Done processing width :" + str(j)
+        print "---Results: Max % = " + str(perc) + " for " + char
+        
+        if (perc>max_perc):
+            max_perc = perc
+            max_char = char
+            max_filepath = filepath
+            max_right_border = right_border
+            max_im = letter.im
         
     #max_im.show()
     return max_perc, max_char, max_filepath, max_right_border
