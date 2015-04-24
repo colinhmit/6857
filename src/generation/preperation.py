@@ -199,7 +199,7 @@ def prep_data(iternum):
 if __name__ == "__main__":
     #prep_data(23)
     #prep_data(24)
-    for i in xrange(1, 25):
+    for i in xrange(1, 25   ):
         prep_data(i)
         
     #prep_data(2)
